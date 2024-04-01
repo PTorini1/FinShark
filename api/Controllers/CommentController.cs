@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers
 {
     [Route("api/comment")]
-    public class CommentController :ControllerBase
+    public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepo;
-        public CommentController(ICommentRepository commentRepo){
+        public CommentController(ICommentRepository commentRepo)
+        {
             _commentRepo = commentRepo;
         }
 
@@ -23,6 +24,19 @@ namespace api.Controllers
             var commentDto = comments.Select(s => s.ToCommentDto());
 
             return Ok(commentDto);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            var comment = await _commentRepo.GetByIdAsync(id);
+
+            if(comment == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(comment.ToCommentDto());
         }
     }
 }

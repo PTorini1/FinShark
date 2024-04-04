@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Comment;
 using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -56,7 +57,7 @@ namespace api.Repository
         {
             var existingComment = await _context.Comments.FindAsync(id);
 
-            if(existingComment == null)
+            if (existingComment == null)
             {
                 return null;
             }

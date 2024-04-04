@@ -14,8 +14,8 @@ namespace api.Mappers
         {
             return new CommentDto 
             {
-                Id = commentModel.Id,                
-                Content = commentModel.Content,
+                Id = commentModel.Id,
+                Content = commentModel.Content,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
                 Title = commentModel.Title,
                 CreatedOn = commentModel.CreatedOn,
                 StockId = commentModel.StockId,
@@ -28,6 +28,14 @@ namespace api.Mappers
                 Content = commentDto.Content,
                 Title = commentDto.Title,
                 StockId = stockId
+            };
+        }
+        public static Comment ToCommentFromUpdate(this UpdateCommentRequestDto commentDto)
+        {
+            return new Comment
+            {
+                Content = commentDto.Content,
+                Title = commentDto.Title
             };
         }
     }

@@ -20,6 +20,7 @@ namespace api.Repository
         {
             _context = context;
         }
+
         public async Task<Stock> CreateAsync(Stock stockModel)
         {
             await _context.Stocks.AddAsync(stockModel);
@@ -42,6 +43,7 @@ namespace api.Repository
 
             return stockModel;
         }
+
         public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
             var stocks =  _context.Stocks.Include(c => c.Comments).AsQueryable();
@@ -64,19 +66,22 @@ namespace api.Repository
                 }
             }
 
-            return await stocks.ToListAsync();
+            var skipNumber = (query.PageNumber -1) * query.PageSize;;
+
+            return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
+
         public async Task<Stock?> GetByIdAsync(int id)
         {
             return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
         }
 
-    public Task<bool> StockExists(int id)
-    {
-        return _context.Stocks.AnyAsync(s => s.Id == id);
-    }
+        public Task<bool> StockExists(int id)
+        {
+            return _context.Stocks.AnyAsync(s => s.Id == id);
+        }
 
-    public async Task<Stock> UpdateAsync(int id, UpdateStockRequestDto stockDto)
+        public async Task<Stock> UpdateAsync(int id, UpdateStockRequestDto stockDto)
         {
             var existingStock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 

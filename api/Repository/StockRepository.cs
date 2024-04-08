@@ -46,24 +46,18 @@ namespace api.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+            var stocks = _context.Stocks.Include(c => c.Comments).ThenInclude(a => a.AppUser).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.CompanyName))
-            {
                 stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
-            }
 
             if (!string.IsNullOrWhiteSpace(query.Symbol))
-            {
                 stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
-            }
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
                 if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
-                {
                     stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
-                }
             }
 
             var skipNumber = (query.PageNumber - 1) * query.PageSize; ;
@@ -91,9 +85,7 @@ namespace api.Repository
             var existingStock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
             if (existingStock == null)
-            {
                 return null;
-            }
 
             existingStock.Symbol = stockDto.Symbol;
             existingStock.CompanyName = stockDto.CompanyName;
